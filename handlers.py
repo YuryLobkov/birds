@@ -70,10 +70,6 @@ def birds_on_start(hashMap, _files=None, _data=None):
                                 "document_type": "",
                                 "mask": "",
                                 "Variable": "",
-                                "TextSize": "16",
-                                "TextColor": "#DB7093",
-                                "TextBold": True,
-                                "TextItalic": False,
                                 "BackgroundColor": "",
                                 "width": "match_parent",
                                 "height": "wrap_content",
@@ -94,6 +90,12 @@ def birds_on_start(hashMap, _files=None, _data=None):
                                         "document_type": "",
                                         "mask": "",
                                         "Variable": "",
+                                        "TextSize": "16",
+                                        "TextColor": "#34c3eb",
+                                        "TextBold": True,
+                                        "TextItalic": False,
+                                        "vertical_gravity": "center",
+                                        "weight": "3",
                                     },
                                     {
                                         "type": "TextView",
@@ -103,6 +105,11 @@ def birds_on_start(hashMap, _files=None, _data=None):
                                         "document_type": "",
                                         "mask": "",
                                         "Variable": "",
+                                        "TextSize": "16",
+                                        "TextColor": "#07a663",
+                                        "TextBold": True,
+                                        "TextItalic": False,
+                                        "gravity_horizontal": "center",
                                     },
                                 ],
                             },
@@ -117,8 +124,8 @@ def birds_on_start(hashMap, _files=None, _data=None):
     for bird in j_birds:
         c = {
             "key": bird["id"],
-            "name": bird["name"],
-            "color": bird["color"],
+            "name": 'Name: '+bird["name"],
+            "color": 'Feathers color: '+bird["color"],
             "pic1": '~'+ next((d['path'] for d in _files if d['id'] == bird['image']), None)
         }
         j["customcards"]["cardsdata"].append(c)
