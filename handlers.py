@@ -141,15 +141,20 @@ def birds_on_add(hashMap, _files=None, _data=None):
             color=hashMap.get("feather_color"),
             image=hashMap.get("img"),
         )
+        hashMap.put("bird_name", "")
+        hashMap.put("feather_color", "")
+        hashMap.put("new_image", "")
+        hashMap.put("camera", "")
         hashMap.put("ShowScreen", "BirdsList")
     return hashMap
 
 
 def birds_add_on_start(hashMap, _files=None, _data=None):
-    if hashMap.containsKey("bird_name"):
-        hashMap.put("bird_name", "")
-    if hashMap.containsKey("feather_color"):
-        hashMap.put("feather_color", "")
+    if not hashMap.containsKey('camera'):
+        hashMap.put('no_image', 'No image')
+    else:
+        hashMap.put('no_image', '')
+        hashMap.put('new_image', '~'+ next((d['path'] for d in _files if d['id'] == hashMap.get('camera')), ''))
     return hashMap
 
 
