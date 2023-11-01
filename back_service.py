@@ -8,6 +8,7 @@ def camera_on_input():
     if hashMap.get('listener') == 'photo':
         img = hashMap.get('camera')
         print(img)
+        print(hashMap.put('getfiles',img))
 
 
 @app.route('/set_input_direct/<method>', methods=['POST'])

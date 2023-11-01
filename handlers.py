@@ -6,12 +6,14 @@ db = Database()
 db.bind(
     provider="sqlite",
     filename="//data/data/ru.travelfood.simple_ui/databases/SimpleWMS",
+    create_db=True,
 )
 
 
 class Birds(db.Entity):
     name = Required(str)
     color = Required(str)
+    image = Required(str)
 
 
 @db_session
@@ -19,12 +21,12 @@ def delete_all_birds():
     delete(b for b in Birds)
 
 
-db.generate_mapping(create_tables=False)
+db.generate_mapping(create_tables=True)
 
 
 @db_session
-def write_bird(name, color):
-    b1 = Birds(name=name, color=color)
+def write_bird(name, color, image):
+    b1 = Birds(name=name, color=color, image=image)
 
 
 @db_session
@@ -41,7 +43,7 @@ def birds_on_create(hashMap, _files=None, _data=None):
 
 
 def birds_on_start(hashMap, _files=None, _data=None):
-    # hashMap.put("temp_var", read_birds())
+    hashMap.put('getfiles','')
     j_birds = read_birds()
     j = {
         "customcards": {
@@ -87,7 +89,7 @@ def birds_on_start(hashMap, _files=None, _data=None):
                                     {
                                         "type": "TextView",
                                         "show_by_condition": "",
-                                        "Value": "@string1",
+                                        "Value": "@name",
                                         "NoRefresh": False,
                                         "document_type": "",
                                         "mask": "",
@@ -96,7 +98,7 @@ def birds_on_start(hashMap, _files=None, _data=None):
                                     {
                                         "type": "TextView",
                                         "show_by_condition": "",
-                                        "Value": "@string2",
+                                        "Value": "@color",
                                         "NoRefresh": False,
                                         "document_type": "",
                                         "mask": "",
@@ -114,9 +116,10 @@ def birds_on_start(hashMap, _files=None, _data=None):
     j["customcards"]["cardsdata"] = []
     for bird in j_birds:
         c = {
-            "key": bird['id'],
-            "string1": bird['name'],
-            "string2": bird['color'],
+            "key": bird["id"],
+            "name": bird["name"],
+            "color": bird["color"],
+            "pic1": '~'+ next((d['path'] for d in _files if d['id'] == bird['image']), None)
         }
         j["customcards"]["cardsdata"].append(c)
 
@@ -126,22 +129,27 @@ def birds_on_start(hashMap, _files=None, _data=None):
 
 
 def birds_after_start(hashMap, _files=None, _data=None):
-    # delete_all_birds()
+    # delete_all_birds() # only for debug, to clean table
+    # db.drop_table("Birds")# only for debug
     return hashMap
 
 
 def birds_on_add(hashMap, _files=None, _data=None):
     if hashMap.get("listener") == "btn_save":
-        write_bird(hashMap.get("bird_name"), color=hashMap.get("feather_color"))
+        write_bird(
+            hashMap.get("bird_name"),
+            color=hashMap.get("feather_color"),
+            image=hashMap.get("img"),
+        )
         hashMap.put("ShowScreen", "BirdsList")
     return hashMap
 
 
 def birds_add_on_start(hashMap, _files=None, _data=None):
-    if hashMap.containsKey('bird_name'):
-        hashMap.put('bird_name','')
-    if hashMap.containsKey('feather_color'):
-        hashMap.put('feather_color','')
+    if hashMap.containsKey("bird_name"):
+        hashMap.put("bird_name", "")
+    if hashMap.containsKey("feather_color"):
+        hashMap.put("feather_color", "")
     return hashMap
 
 
@@ -151,9 +159,23 @@ def init_bd_on_start(hashMap, _files=None, _data=None):
         "SQLExec",
         json.dumps(
             {
-                "query": "create table IF NOT EXISTS Birds(id integer primary key autoincrement, name text, color text)",
+                "query": "create table IF NOT EXISTS Birds(id integer primary key autoincrement, name text, color text, image text)",
                 "params": "",
             }
         ),
     )
+    return hashMap
+
+
+def camera_on_start(hashMap, _files=None, _data=None):
+    hashMap.put("mm_local", "")
+    hashMap.put("mm_size", "30")
+    hashMap.put("mm_compression", "30")
+    return hashMap
+
+
+def camera_on_input(hashMap, _files=None, _data=None):
+    if hashMap.get("listener") == "photo":
+        img = hashMap.get("camera")
+        hashMap.put("img", img)
     return hashMap
