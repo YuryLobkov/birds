@@ -1,0 +1,259 @@
+{
+    "ClientConfiguration": {
+        "ConfigurationName": "Test_birds",
+        "ConfigurationDescription": "New SimpleUI confiluration development",
+        "ConfigurationVersion": "0.0.1",
+        "Processes": [
+            {
+                "type": "Process",
+                "ProcessName": "Birds",
+                "PlanFactHeader": "Plan/Fact",
+                "DefineOnBackPressed": false,
+                "hidden": false,
+                "login_screen": false,
+                "SC": false,
+                "Operations": [
+                    {
+                        "type": "Operation",
+                        "Name": "BirdsList",
+                        "Timer": false,
+                        "hideToolBarScreen": false,
+                        "noScroll": false,
+                        "handleKeyUp": false,
+                        "noConfirmation": true,
+                        "hideBottomBarScreen": true,
+                        "onlineOnStart": false,
+                        "send_when_opened": false,
+                        "send_after_opened": false,
+                        "onlineOnInput": false,
+                        "DefOnlineOnCreate": "",
+                        "DefOnlineOnInput": "",
+                        "DefOnCreate": "",
+                        "DefOnInput": "",
+                        "Elements": [
+                            {
+                                "Value": "",
+                                "Variable": "",
+                                "type": "LinearLayout",
+                                "weight": "0",
+                                "height": "match_parent",
+                                "width": "match_parent",
+                                "orientation": "vertical",
+                                "Elements": [
+                                    {
+                                        "type": "TextView",
+                                        "height": "wrap_content",
+                                        "width": "wrap_content",
+                                        "weight": "0",
+                                        "Value": "@temp_var",
+                                        "Variable": "temp_var",
+                                        "orientation": "vertical",
+                                        "Elements": []
+                                    },
+                                    {
+                                        "type": "Button",
+                                        "height": "wrap_content",
+                                        "width": "wrap_content",
+                                        "weight": "10",
+                                        "Value": "Add",
+                                        "Variable": "add_bird",
+                                        "drawable": "plus",
+                                        "gravity_horizontal": "right",
+                                        "TextBold": true
+                                    }
+                                ],
+                                "BackgroundColor": "",
+                                "StrokeWidth": "",
+                                "Padding": ""
+                            }
+                        ],
+                        "onlineOnAfterStart": false,
+                        "layout_file": "",
+                        "Handlers": [
+                            {
+                                "event": "onStart",
+                                "action": "run",
+                                "type": "python",
+                                "method": "birds_on_start",
+                                "postExecute": "",
+                                "listener": ""
+                            },
+                            {
+                                "event": "onInput",
+                                "action": "run",
+                                "type": "python",
+                                "method": "birds_on_create",
+                                "postExecute": ""
+                            },
+                            {
+                                "event": "onStart",
+                                "action": "run",
+                                "type": "python",
+                                "method": "init_bd_on_start",
+                                "postExecute": ""
+                            },
+                            {
+                                "event": "onPostStart",
+                                "action": "run",
+                                "type": "python",
+                                "method": "birds_after_start",
+                                "postExecute": ""
+                            }
+                        ]
+                    },
+                    {
+                        "Name": "BirdAdd",
+                        "type": "Operation",
+                        "Elements": [
+                            {
+                                "Value": "",
+                                "Variable": "",
+                                "type": "LinearLayout",
+                                "weight": "0",
+                                "height": "match_parent",
+                                "width": "match_parent",
+                                "orientation": "vertical",
+                                "Elements": [
+                                    {
+                                        "type": "TextView",
+                                        "height": "match_parent",
+                                        "width": "match_parent",
+                                        "weight": "0",
+                                        "Value": "Add new bird",
+                                        "Variable": "",
+                                        "TextBold": true,
+                                        "TextSize": "20"
+                                    },
+                                    {
+                                        "type": "TextView",
+                                        "height": "wrap_content",
+                                        "width": "wrap_content",
+                                        "weight": "0",
+                                        "Value": "Name",
+                                        "Variable": ""
+                                    },
+                                    {
+                                        "type": "EditTextText",
+                                        "height": "wrap_content",
+                                        "width": "match_parent",
+                                        "weight": "0",
+                                        "Value": "@bird_name",
+                                        "Variable": "bird_name"
+                                    },
+                                    {
+                                        "type": "TextView",
+                                        "height": "wrap_content",
+                                        "width": "wrap_content",
+                                        "weight": "0",
+                                        "Value": "Feather color",
+                                        "Variable": ""
+                                    },
+                                    {
+                                        "type": "EditTextText",
+                                        "height": "wrap_content",
+                                        "width": "match_parent",
+                                        "weight": "0",
+                                        "Value": "@feather_color",
+                                        "Variable": "feather_color"
+                                    },
+                                    {
+                                        "type": "Button",
+                                        "height": "match_parent",
+                                        "width": "match_parent",
+                                        "weight": "0",
+                                        "Value": "save",
+                                        "Variable": "btn_save"
+                                    }
+                                ],
+                                "BackgroundColor": "",
+                                "StrokeWidth": "",
+                                "Padding": ""
+                            }
+                        ],
+                        "Timer": false,
+                        "hideToolBarScreen": false,
+                        "noScroll": false,
+                        "handleKeyUp": false,
+                        "hideBottomBarScreen": true,
+                        "onlineOnStart": false,
+                        "onlineOnAfterStart": false,
+                        "onlineOnInput": false,
+                        "noConfirmation": true,
+                        "layout_file": "",
+                        "Handlers": [
+                            {
+                                "event": "onInput",
+                                "action": "run",
+                                "type": "python",
+                                "method": "birds_on_add",
+                                "postExecute": "",
+                                "listener": "btn_save"
+                            },
+                            {
+                                "event": "onStart",
+                                "action": "run",
+                                "type": "python",
+                                "method": "birds_add_on_start",
+                                "postExecute": ""
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "ProcessName": "Scan",
+                "type": "Process",
+                "Operations": [
+                    {
+                        "Name": "ScanScreen",
+                        "type": "Operation",
+                        "Elements": [
+                            {
+                                "Value": "",
+                                "Variable": "",
+                                "type": "LinearLayout",
+                                "weight": "0",
+                                "height": "wrap_content",
+                                "width": "wrap_content",
+                                "orientation": "vertical",
+                                "Elements": [],
+                                "BackgroundColor": "",
+                                "StrokeWidth": "",
+                                "Padding": ""
+                            },
+                            {
+                                "Value": "",
+                                "Variable": "camera",
+                                "type": "photo"
+                            }
+                        ],
+                        "Timer": false,
+                        "hideToolBarScreen": false,
+                        "noScroll": false,
+                        "handleKeyUp": false,
+                        "hideBottomBarScreen": true,
+                        "onlineOnStart": false,
+                        "onlineOnAfterStart": false,
+                        "onlineOnInput": false,
+                        "Handlers": [
+                            {
+                                "event": "onInput",
+                                "action": "run",
+                                "type": "online",
+                                "method": "camera_on_input",
+                                "postExecute": ""
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "ConfigurationSettings": {
+            "uid": "c562f7effb7c43ac989e537a14d091f9"
+        },
+        "ConfigurationTags": "Py,off-line",
+        "arch2": true,
+        "PyHandlers": "aW1wb3J0IGpzb24KCmRlZiBiaXJkc19vbl9jcmVhdGUoaGFzaE1hcCwgX2ZpbGVzPU5vbmUsIF9kYXRhPU5vbmUpOgogICAgaWYgaGFzaE1hcC5nZXQoJ2xpc3RlbmVyJykgPT0gJ2FkZF9iaXJkJzoKICAgICAgICBoYXNoTWFwLnB1dCgnU2hvd1NjcmVlbicsICdCaXJkQWRkJykKICAgIHJldHVybiBoYXNoTWFwCgoKZGVmIGJpcmRzX29uX3N0YXJ0KGhhc2hNYXAsIF9maWxlcz1Ob25lLCBfZGF0YT1Ob25lKToKICAgIGhhc2hNYXAucHV0KCdTUUxRdWVyeScsanNvbi5kdW1wcyh7InF1ZXJ5IjoiU0VMRUNUICogRlJPTSBCaXJkcyIsInBhcmFtcyI6IiJ9KSkKICAgIGlmIG5vdCBoYXNoTWFwLmNvbnRhaW5zS2V5KCJ0ZW1wX3ZhciIpOgogICAgICAgIGhhc2hNYXAucHV0KCJ0ZW1wX3ZhciIsImVtcHR5IikgICAgCiAgICByZXR1cm4gaGFzaE1hcAoKZGVmIGJpcmRzX2FmdGVyX3N0YXJ0KGhhc2hNYXAsIF9maWxlcz1Ob25lLCBfZGF0YT1Ob25lKToKICAgIGhhc2hNYXAucHV0KCd0b2FzdCcsaGFzaE1hcC5nZXQoJ1NRTFJlc3VsdCcpKQogICAgcmV0dXJuIGhhc2hNYXAKCgpkZWYgYmlyZHNfb25fYWRkKGhhc2hNYXAsIF9maWxlcz1Ob25lLCBfZGF0YT1Ob25lKToKICAgIHByaW50KGhhc2hNYXAuZ2V0KCdsaXN0ZW5lcicpKQogICAgaWYgaGFzaE1hcC5nZXQoJ2xpc3RlbmVyJykgPT0gJ2J0bl9zYXZlJzoKICAgICAgICBwcmludChoYXNoTWFwLmdldCgnYmlyZF9uYW1lJykpCiAgICAgICAgIyBUT0RPIG1ha2UgaXQgc2FmZSwgbm8gaW5qZWN0aW9ucwogICAgICAgIGhhc2hNYXAucHV0KCdTUUxFeGVjJywganNvbi5kdW1wcyh7InF1ZXJ5IjpmIklOU0VSVCBJTlRPIEJpcmRzIChuYW1lLCBjb2xvcikgVkFMVUVTICh7aGFzaE1hcC5nZXQoJ2JpcmRfbmFtZScpfSwge2hhc2hNYXAuZ2V0KCdmZWF0aGVyX2NvbG9yJyl9KSIsInBhcmFtcyI6IiJ9KSkKICAgIHJldHVybiBoYXNoTWFwCgpkZWYgYmlyZHNfYWRkX29uX3N0YXJ0KGhhc2hNYXAsIF9maWxlcz1Ob25lLCBfZGF0YT1Ob25lKToKICAgIHByaW50KCdTVEFSVCFcblxuXG4nKQogICAgcmV0dXJuIGhhc2hNYXAKCmRlZiBpbml0X2JkX29uX3N0YXJ0KGhhc2hNYXAsX2ZpbGVzPU5vbmUsX2RhdGE9Tm9uZSk6CiAgICBoYXNoTWFwLnB1dCgiU1FMQ29ubmVjdERhdGFiYXNlIiwiIikKICAgIGhhc2hNYXAucHV0KCJTUUxFeGVjIixqc29uLmR1bXBzKHsicXVlcnkiOiJjcmVhdGUgdGFibGUgSUYgTk9UIEVYSVNUUyBCaXJkcyhpZCBpbnRlZ2VyIHByaW1hcnkga2V5IGF1dG9pbmNyZW1lbnQsIG5hbWUgdGV4dCwgY29sb3IgdGV4dCkiLCJwYXJhbXMiOiIifSkpCiAgICByZXR1cm4gaGFzaE1hcA==",
+        "RunPython": true
+    }
+}
