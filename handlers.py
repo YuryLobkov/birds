@@ -150,11 +150,21 @@ def birds_on_add(hashMap, _files=None, _data=None):
 
 
 def birds_add_on_start(hashMap, _files=None, _data=None):
-    if not hashMap.containsKey('camera'):
+    # TODO make gallery allow to appear after camera, and optimize code
+    if not hashMap.containsKey('camera') and not hashMap.containsKey('gallery'):
         hashMap.put('no_image', 'No image')
-    else:
+    elif hashMap.containsKey('camera'):
         hashMap.put('no_image', '')
-        hashMap.put('new_image', '~'+ next((d['path'] for d in _files if d['id'] == hashMap.get('camera')), ''))
+        hashMap.put('gallery', hashMap.get('camera'))
+        hashMap.put('img', hashMap.get('gallery'))
+        new_image_path = next((d['path'] for d in _files if d['id'] == hashMap.get('camera')), '')
+        hashMap.put('new_image', '~' + new_image_path)
+    elif hashMap.containsKey('gallery'):
+        hashMap.put('no_image', '')
+        hashMap.put('camera', hashMap.get('gallery'))
+        hashMap.put('img', hashMap.get('gallery'))
+        new_image_path = next((d['path'] for d in _files if d['id'] == hashMap.get('gallery')), '')
+        hashMap.put('new_image', '~' + new_image_path)
     return hashMap
 
 
@@ -180,7 +190,7 @@ def camera_on_start(hashMap, _files=None, _data=None):
 
 
 def camera_on_input(hashMap, _files=None, _data=None):
-    if hashMap.get("listener") == "photo":
-        img = hashMap.get("camera")
-        hashMap.put("img", img)
+    # if hashMap.get("listener") == "photo":
+    #     img = hashMap.get("camera")
+    #     hashMap.put("img", img)
     return hashMap
