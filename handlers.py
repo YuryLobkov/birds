@@ -303,8 +303,10 @@ def seen_birds_on_start(hashMap, _files=None, _data=None):
     hashMap.put("getfiles", "")
     if hashMap.get('_seen_bird_id') != None:
         hashMap.put('show_write_seen_bird_btn','1')
+        hashMap.put('seen_list_title','')
     else:
         hashMap.put('Show_write_seen_bird_btn', '0')
+        hashMap.put('seen_list_title','To add bird in seen`s list, select it in "Birds" process by pressing "Eye" button, then return here')
     j_birds_seen = read_seen_birds()
     j = {
         "customcards": {
@@ -398,9 +400,9 @@ def seen_birds_on_start(hashMap, _files=None, _data=None):
     for bird_seen in j_birds_seen:
         c = {
             'pic1': '~'+ next((d['path'] for d in _files if d['id'] == bird_seen['image']), None),
-            'name': bird_seen['name'],
-            'date_time': bird_seen['datetime_seen'],
-            'seen_times': bird_seen['times_seen']
+            'name': 'Bird name: '+bird_seen['name'],
+            'date_time': 'Seen on '+bird_seen['datetime_seen'],
+            'seen_times': 'Total: seen'+str(bird_seen['times_seen'])+' times'
         }
         j["customcards"]["cardsdata"].append(c)
 
