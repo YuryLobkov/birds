@@ -1,7 +1,7 @@
 import json
 from os import name
-from pony.orm.core import db_session
-from pony.orm import Database, Required, select, delete
+from pony.orm.core import db_session, datetime
+from pony.orm import Database, Required, Optional, PrimaryKey, Set, select, delete
 
 db = Database()
 db.bind(
@@ -12,9 +12,17 @@ db.bind(
 
 
 class Birds(db.Entity):
+    id = PrimaryKey(int, auto=True)
     name = Required(str)
     color = Required(str)
-    image = Required(str)
+    image = Optional(str)
+    seen = Set('SeenBirds')
+
+
+class SeenBirds(db.Entity):
+    id = PrimaryKey(int, auto=True)
+    datetime_seen = Required(datetime.datetime, sql_default='CURRENT_TIMESTAMP')
+    bird_id = Optional(Birds)
 
 
 @db_session
@@ -225,3 +233,19 @@ def camera_on_start(hashMap, _files=None, _data=None):
 
 def camera_on_input(hashMap, _files=None, _data=None):
     return hashMap
+
+###----------------------seen birds handlers----------------
+
+@db_session
+def write_seen_birds(id):
+    bs1 = SeenBirds(bird_id = id)
+
+def seen_birds_on_input(hashMap, _files=None, _data=None):
+    if hashMap.get('listener') == 'check':
+        hashMap.put('toast',hashMap.get('_seen_bird_id'))
+    if hashMap.get('listener') == 'write_seen_bird_btn':
+        write_seen_birds(hashMap.get('_seen_bird_id'))
+        hashMap.put('_seen_bird_id',None)
+    return hashMap
+
+
