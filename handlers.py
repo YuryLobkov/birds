@@ -148,30 +148,35 @@ def birds_on_add(hashMap, _files=None, _data=None):
             color=hashMap.get("feather_color"),
             image=hashMap.get("img"),
         )
+        # cleaning hashmap after db write to clean form for next new bird
         hashMap.put("bird_name", "")
         hashMap.put("feather_color", "")
         hashMap.put("new_image", "")
-        hashMap.put("camera", "")
+        hashMap.put("camera", None)
+        hashMap.put('gallery',None)
+        hashMap.put('img','')
         hashMap.put("ShowScreen", "BirdsList")
     return hashMap
 
 
 def birds_add_on_start(hashMap, _files=None, _data=None):
-    # TODO make gallery allow to appear after camera, and optimize code
-    if not hashMap.containsKey('camera') and not hashMap.containsKey('gallery'):
+    #Check if one of images has been provided
+    if hashMap.get('camera') == None and hashMap.get('gallery') == None:
         hashMap.put('no_image', 'No image')
-    elif hashMap.containsKey('camera'):
+    #case gallery (remove 'no image' text, write img var, put image to form and clean input variables)
+    elif hashMap.containsKey('gallery') and hashMap.get('gallery') != None:
         hashMap.put('no_image', '')
-        hashMap.put('gallery', hashMap.get('camera'))
         hashMap.put('img', hashMap.get('gallery'))
-        new_image_path = next((d['path'] for d in _files if d['id'] == hashMap.get('camera')), '')
-        hashMap.put('new_image', '~' + new_image_path)
-    elif hashMap.containsKey('gallery'):
+        hashMap.put('new_image', '~' + next((d['path'] for d in _files if d['id'] == hashMap.get('gallery')), ''))
+        hashMap.put('gallery',None)
+        hashMap.put('camera',None)
+    #case camera, same as above
+    elif hashMap.containsKey('camera') and hashMap.get('camera') != None:
         hashMap.put('no_image', '')
-        hashMap.put('camera', hashMap.get('gallery'))
-        hashMap.put('img', hashMap.get('gallery'))
-        new_image_path = next((d['path'] for d in _files if d['id'] == hashMap.get('gallery')), '')
-        hashMap.put('new_image', '~' + new_image_path)
+        hashMap.put('img', hashMap.get('camera'))
+        hashMap.put('new_image', '~' + next((d['path'] for d in _files if d['id'] == hashMap.get('camera')), ''))
+        hashMap.put('camera',None)
+        hashMap.put('gallery',None)
     return hashMap
 
 
@@ -197,7 +202,4 @@ def camera_on_start(hashMap, _files=None, _data=None):
 
 
 def camera_on_input(hashMap, _files=None, _data=None):
-    # if hashMap.get("listener") == "photo":
-    #     img = hashMap.get("camera")
-    #     hashMap.put("img", img)
     return hashMap
