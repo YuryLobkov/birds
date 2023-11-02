@@ -255,7 +255,7 @@ def camera_on_input(hashMap, _files=None, _data=None):
     return hashMap
 
 
-###----------------------seen birds handlers----------------
+###-------------------vvv---seen birds handlers---vvv-------------
 
 
 @db_session
@@ -301,6 +301,10 @@ def seen_birds_on_input(hashMap, _files=None, _data=None):
 
 def seen_birds_on_start(hashMap, _files=None, _data=None):
     hashMap.put("getfiles", "")
+    if hashMap.get('_seen_bird_id') != None:
+        hashMap.put('show_write_seen_bird_btn','1')
+    else:
+        hashMap.put('Show_write_seen_bird_btn', '0')
     j_birds_seen = read_seen_birds()
     j = {
         "customcards": {
@@ -328,16 +332,16 @@ def seen_birds_on_start(hashMap, _files=None, _data=None):
                                 "mask": "",
                                 "Variable": "",
                                 "BackgroundColor": "",
-                                "width": "wrap_content",
+                                "width": "match_parent",
                                 "height": "match_parent",
-                                "weight": 0,
+                                "weight": 2,
                             },
                             {
                                 "type": "LinearLayout",
                                 "orientation": "vertical",
                                 "height": "wrap_content",
                                 "width": "match_parent",
-                                "weight": "0",
+                                "weight": "1",
                                 "Elements": [
                                     {
                                         "type": "TextView",
@@ -348,7 +352,7 @@ def seen_birds_on_start(hashMap, _files=None, _data=None):
                                         "mask": "",
                                         "Variable": "",
                                         "TextSize": "16",
-                                        "TextColor": "#34c3eb",
+                                        "TextColor": "#1b6d7d",
                                         "TextBold": True,
                                         "TextItalic": False,
                                         "vertical_gravity": "center",
@@ -361,8 +365,8 @@ def seen_birds_on_start(hashMap, _files=None, _data=None):
                                         "document_type": "",
                                         "mask": "",
                                         "Variable": "",
-                                        "TextSize": "16",
-                                        "TextColor": "#07a663",
+                                        "TextSize": "18",
+                                        "TextColor": "#42021c",
                                         "TextBold": True,
                                         "TextItalic": False,
                                         "gravity_horizontal": "center",
@@ -375,9 +379,9 @@ def seen_birds_on_start(hashMap, _files=None, _data=None):
                                         "document_type": "",
                                         "mask": "",
                                         "Variable": "",
-                                        "TextSize": "16",
-                                        "TextColor": "#07a663",
-                                        "TextBold": True,
+                                        "TextSize": "14",
+                                        "TextColor": "#333333",
+                                        "TextBold": False,
                                         "TextItalic": True,
                                         "gravity_horizontal": "center",
                                     },
