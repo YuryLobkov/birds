@@ -1,4 +1,5 @@
 import json
+from os import name
 from pony.orm.core import db_session
 from pony.orm import Database, Required, select, delete
 
@@ -39,6 +40,11 @@ def read_birds():
 def birds_on_create(hashMap, _files=None, _data=None):
     if hashMap.get("listener") == "add_bird":
         hashMap.put("ShowScreen", "BirdAdd")
+    if hashMap.get("listener") == 'LayoutAction':
+        seen_bird_id = json.loads(hashMap.get("card_data"))['key']
+        seen_bird_name = json.loads(hashMap.get("card_data"))['name'][6:]
+        hashMap.put("toast", 'Bird '+seen_bird_name+' saved as seen')
+        hashMap.put('_seen_bird_id',str(seen_bird_id))
     return hashMap
 
 
@@ -125,7 +131,7 @@ def birds_on_start(hashMap, _files=None, _data=None):
                                         "width": "match_parent",
                                         "weight": "0",
                                         "Value": "#f06e",
-                                        "Variable": "key"
+                                        "Variable": "@key"
                                     }
                                 ]
                             },
