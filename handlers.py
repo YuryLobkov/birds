@@ -71,9 +71,9 @@ def birds_on_start(hashMap, _files=None, _data=None):
                                 "mask": "",
                                 "Variable": "",
                                 "BackgroundColor": "",
-                                "width": "match_parent",
-                                "height": "wrap_content",
-                                "weight": 2,
+                                "width": "200",
+                                "height": "100",
+                                "weight": 1,
                             },
                             {
                                 "type": "LinearLayout",
@@ -95,7 +95,6 @@ def birds_on_start(hashMap, _files=None, _data=None):
                                         "TextBold": True,
                                         "TextItalic": False,
                                         "vertical_gravity": "center",
-                                        "weight": "3",
                                     },
                                     {
                                         "type": "TextView",
@@ -112,6 +111,23 @@ def birds_on_start(hashMap, _files=None, _data=None):
                                         "gravity_horizontal": "center",
                                     },
                                 ],
+                            },
+                            {
+                                "type": "LinearLayout",
+                                "orientation": "horizontal",
+                                "height": "match_parent",
+                                "width": "wrap_content",
+                                "weight": "5",
+                                "Elements": [
+                                    {
+                                        "type": "Button",
+                                        "height": "match_parent",
+                                        "width": "match_parent",
+                                        "weight": "0",
+                                        "Value": "#f06e",
+                                        "Variable": "key"
+                                    }
+                                ]
                             },
                         ],
                     },
