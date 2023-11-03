@@ -200,19 +200,27 @@ def birds_after_start(hashMap, _files=None, _data=None):
 
 def birds_on_add(hashMap, _files=None, _data=None):
     if hashMap.get("listener") == "btn_save":
-        write_bird(
-            hashMap.get("bird_name"),
-            color=hashMap.get("feather_color"),
-            image=hashMap.get("img"),
-        )
-        # cleaning hashmap after db write to clean form for next new bird
-        hashMap.put("bird_name", "")
-        hashMap.put("feather_color", "")
-        hashMap.put("new_image", "")
-        hashMap.put("camera", None)
-        hashMap.put("gallery", None)
-        hashMap.put("img", "")
-        hashMap.put("ShowScreen", "BirdsList")
+        try:
+            write_bird(
+                hashMap.get("bird_name"),
+                color=hashMap.get("feather_color"),
+                image=hashMap.get("img"),
+            )
+        except ValueError:
+            for field, field_name in {"bird_name": "name", "feather_color": 'feather color', "img": "photo"}.items():
+                if hashMap.get(field) == "" or hashMap.get(field) == None:
+                    hashMap.put("SetRed", field)
+                    hashMap.put("toast","You forgot to input "+ field_name)
+                else:
+                    hashMap.put("SetGreen", field)
+        else:  # cleaning hashmap after db write to clean form for next new bird
+            hashMap.put("bird_name", "")
+            hashMap.put("feather_color", "")
+            hashMap.put("new_image", "")
+            hashMap.put("camera", None)
+            hashMap.put("gallery", None)
+            hashMap.put("img", "")
+            hashMap.put("ShowScreen", "BirdsList")
     return hashMap
 
 
