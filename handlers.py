@@ -108,8 +108,8 @@ def birds_on_start(hashMap, _files=None, _data=None):
                                 "mask": "",
                                 "Variable": "",
                                 "BackgroundColor": "",
-                                "width": "200",
-                                "height": "100",
+                                "width": "300",
+                                "height": "120",
                                 "weight": 1,
                             },
                             {
@@ -347,9 +347,9 @@ def seen_birds_on_start(hashMap, _files=None, _data=None):
                                 "mask": "",
                                 "Variable": "",
                                 "BackgroundColor": "",
-                                "width": "match_parent",
-                                "height": "match_parent",
-                                "weight": 2,
+                                "width": "300",
+                                "height": "150",
+                                "weight": 1,
                             },
                             {
                                 "type": "LinearLayout",
