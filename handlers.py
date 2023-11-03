@@ -1,5 +1,5 @@
 import json
-from os import name
+from PIL import Image
 from pony.orm.core import db_session
 from pony.orm import (
     Database,
@@ -52,6 +52,20 @@ def read_birds():
     birds_list = select(b for b in Birds)[:]
     birds = [b.to_dict() for b in birds_list]
     return birds
+
+
+def crop_image(image_path):
+    with Image.open(image_path) as im:
+        width, height = im.size
+        min_dimension = min(width, height)
+        left = (width - min_dimension) / 2
+        top = (height - min_dimension) / 2
+        right = (width + min_dimension) / 2
+        bottom = (height + min_dimension) / 2
+        cropped_img = im.crop((left, top, right, bottom))
+        cropped_img.save(image_path)
+
+        return cropped_img
 
 
 def birds_on_create(hashMap, _files=None, _data=None):
@@ -205,26 +219,20 @@ def birds_add_on_start(hashMap, _files=None, _data=None):
         hashMap.put("no_image", "No image")
     # case gallery (remove 'no image' text, write img var, put image to form and clean input variables)
     elif hashMap.containsKey("gallery") and hashMap.get("gallery") != None:
+        path_gallery = next((d["path"] for d in _files if d["id"] == hashMap.get("gallery")), "")
+        crop_image(path_gallery)
         hashMap.put("no_image", "")
         hashMap.put("img", hashMap.get("gallery"))
-        hashMap.put(
-            "new_image",
-            "~"
-            + next(
-                (d["path"] for d in _files if d["id"] == hashMap.get("gallery")), ""
-            ),
-        )
+        hashMap.put("new_image", "~" + path_gallery)
         hashMap.put("gallery", None)
         hashMap.put("camera", None)
     # case camera, same as above
     elif hashMap.containsKey("camera") and hashMap.get("camera") != None:
+        path_camera = next((d["path"] for d in _files if d["id"] == hashMap.get("camera")), "")
+        crop_image(path_camera)
         hashMap.put("no_image", "")
         hashMap.put("img", hashMap.get("camera"))
-        hashMap.put(
-            "new_image",
-            "~"
-            + next((d["path"] for d in _files if d["id"] == hashMap.get("camera")), ""),
-        )
+        hashMap.put("new_image", "~" + path_camera)
         hashMap.put("camera", None)
         hashMap.put("gallery", None)
     return hashMap
@@ -285,7 +293,9 @@ def read_seen_birds():
     # Keys for entities of query
     keys = ["image", "name", "datetime_seen", "times_seen"]
     # Creating a list of dictionaries from the list of tuples
-    seen_birds_list = [{keys[i]: item for i, item in enumerate(t)} for t in seen_birds_query]
+    seen_birds_list = [
+        {keys[i]: item for i, item in enumerate(t)} for t in seen_birds_query
+    ]
 
     return seen_birds_list
 
@@ -301,12 +311,15 @@ def seen_birds_on_input(hashMap, _files=None, _data=None):
 
 def seen_birds_on_start(hashMap, _files=None, _data=None):
     hashMap.put("getfiles", "")
-    if hashMap.get('_seen_bird_id') != None:
-        hashMap.put('show_write_seen_bird_btn','1')
-        hashMap.put('seen_list_title','')
+    if hashMap.get("_seen_bird_id") != None:
+        hashMap.put("show_write_seen_bird_btn", "1")
+        hashMap.put("seen_list_title", "")
     else:
-        hashMap.put('Show_write_seen_bird_btn', '0')
-        hashMap.put('seen_list_title','To add bird in seen`s list, select it in "Birds" process by pressing "Eye" button, then return here')
+        hashMap.put("Show_write_seen_bird_btn", "0")
+        hashMap.put(
+            "seen_list_title",
+            'To add bird in seen`s list, select it in "Birds" process by pressing "Eye" button, then return here',
+        )
     j_birds_seen = read_seen_birds()
     j = {
         "customcards": {
@@ -399,10 +412,11 @@ def seen_birds_on_start(hashMap, _files=None, _data=None):
     j["customcards"]["cardsdata"] = []
     for bird_seen in j_birds_seen:
         c = {
-            'pic1': '~'+ next((d['path'] for d in _files if d['id'] == bird_seen['image']), None),
-            'name': 'Bird name: '+bird_seen['name'],
-            'date_time': 'Seen on '+bird_seen['datetime_seen'],
-            'seen_times': 'Total: seen'+str(bird_seen['times_seen'])+' times'
+            "pic1": "~"
+            + next((d["path"] for d in _files if d["id"] == bird_seen["image"]), None),
+            "name": "Bird name: " + bird_seen["name"],
+            "date_time": "Seen on " + bird_seen["datetime_seen"],
+            "seen_times": "Total: seen" + str(bird_seen["times_seen"]) + " times",
         }
         j["customcards"]["cardsdata"].append(c)
 
