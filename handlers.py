@@ -42,18 +42,6 @@ def delete_all_birds():
 db.generate_mapping(create_tables=True)
 
 
-@db_session
-def write_bird(name, color, image):
-    b1 = Birds(name=name, color=color, image=image)
-
-
-@db_session
-def read_birds():
-    birds_list = select(b for b in Birds)[:]
-    birds = [b.to_dict() for b in birds_list]
-    return birds
-
-
 def crop_image(image_path):
     with Image.open(image_path) as im:
         width, height = im.size
@@ -66,6 +54,21 @@ def crop_image(image_path):
         cropped_img.save(image_path)
 
         return cropped_img
+
+
+# ----------------------------vvv---birds list handlers---vvv-----------------------------
+
+
+@db_session
+def write_bird(name, color, image):
+    b1 = Birds(name=name, color=color, image=image)
+
+
+@db_session
+def read_birds():
+    birds_list = select(b for b in Birds)[:]
+    birds = [b.to_dict() for b in birds_list]
+    return birds
 
 
 def birds_on_create(hashMap, _files=None, _data=None):
@@ -219,7 +222,9 @@ def birds_add_on_start(hashMap, _files=None, _data=None):
         hashMap.put("no_image", "No image")
     # case gallery (remove 'no image' text, write img var, put image to form and clean input variables)
     elif hashMap.containsKey("gallery") and hashMap.get("gallery") != None:
-        path_gallery = next((d["path"] for d in _files if d["id"] == hashMap.get("gallery")), "")
+        path_gallery = next(
+            (d["path"] for d in _files if d["id"] == hashMap.get("gallery")), ""
+        )
         crop_image(path_gallery)
         hashMap.put("no_image", "")
         hashMap.put("img", hashMap.get("gallery"))
@@ -228,7 +233,9 @@ def birds_add_on_start(hashMap, _files=None, _data=None):
         hashMap.put("camera", None)
     # case camera, same as above
     elif hashMap.containsKey("camera") and hashMap.get("camera") != None:
-        path_camera = next((d["path"] for d in _files if d["id"] == hashMap.get("camera")), "")
+        path_camera = next(
+            (d["path"] for d in _files if d["id"] == hashMap.get("camera")), ""
+        )
         crop_image(path_camera)
         hashMap.put("no_image", "")
         hashMap.put("img", hashMap.get("camera"))
@@ -238,18 +245,18 @@ def birds_add_on_start(hashMap, _files=None, _data=None):
     return hashMap
 
 
-def init_bd_on_start(hashMap, _files=None, _data=None):
-    hashMap.put("SQLConnectDatabase", "")
-    hashMap.put(
-        "SQLExec",
-        json.dumps(
-            {
-                "query": "create table IF NOT EXISTS Birds(id integer primary key autoincrement, name text, color text, image text)",
-                "params": "",
-            }
-        ),
-    )
-    return hashMap
+# def init_bd_on_start(hashMap, _files=None, _data=None):
+#     hashMap.put("SQLConnectDatabase", "")
+#     hashMap.put(
+#         "SQLExec",
+#         json.dumps(
+#             {
+#                 "query": "create table IF NOT EXISTS Birds(id integer primary key autoincrement, name text, color text, image text)",
+#                 "params": "",
+#             }
+#         ),
+#     )
+#     return hashMap
 
 
 def camera_on_start(hashMap, _files=None, _data=None):
