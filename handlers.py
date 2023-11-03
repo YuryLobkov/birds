@@ -74,11 +74,14 @@ def read_birds():
 def birds_on_create(hashMap, _files=None, _data=None):
     if hashMap.get("listener") == "add_bird":
         hashMap.put("ShowScreen", "BirdAdd")
+
+    # write seen bird ID to gobal variable to use it further in SeenBirds process
     if hashMap.get("listener") == "LayoutAction":
         seen_bird_id = json.loads(hashMap.get("card_data"))["key"]
         seen_bird_name = json.loads(hashMap.get("card_data"))["name"][6:]
         hashMap.put("toast", "Bird " + seen_bird_name + " saved as seen")
         hashMap.put("_seen_bird_id", str(seen_bird_id))
+
     return hashMap
 
 
@@ -195,6 +198,7 @@ def birds_on_start(hashMap, _files=None, _data=None):
 def birds_after_start(hashMap, _files=None, _data=None):
     # delete_all_birds() # only for debug, to clean table
     # db.drop_table("Birds")# only for debug
+    # db.drop_table("SeenBirds", with_all_data=True)# only for debug
     return hashMap
 
 
@@ -207,10 +211,14 @@ def birds_on_add(hashMap, _files=None, _data=None):
                 image=hashMap.get("img"),
             )
         except ValueError:
-            for field, field_name in {"bird_name": "name", "feather_color": 'feather color', "img": "photo"}.items():
+            for field, field_name in {
+                "bird_name": "name",
+                "feather_color": "feather color",
+                "img": "photo",
+            }.items():
                 if hashMap.get(field) == "" or hashMap.get(field) == None:
                     hashMap.put("SetRed", field)
-                    hashMap.put("toast","You forgot to input "+ field_name)
+                    hashMap.put("toast", "You forgot to input " + field_name)
                 else:
                     hashMap.put("SetGreen", field)
         else:  # cleaning hashmap after db write to clean form for next new bird
@@ -228,6 +236,7 @@ def birds_add_on_start(hashMap, _files=None, _data=None):
     # Check if one of images has been provided
     if hashMap.get("camera") == None and hashMap.get("gallery") == None:
         hashMap.put("no_image", "No image")
+
     # case gallery (remove 'no image' text, write img var, put image to form and clean input variables)
     elif hashMap.containsKey("gallery") and hashMap.get("gallery") != None:
         path_gallery = next(
@@ -235,10 +244,11 @@ def birds_add_on_start(hashMap, _files=None, _data=None):
         )
         crop_image(path_gallery)
         hashMap.put("no_image", "")
-        hashMap.put("img", hashMap.get("gallery"))
-        hashMap.put("new_image", "~" + path_gallery)
+        hashMap.put("img", hashMap.get("gallery"))  # to database
+        hashMap.put("new_image", "~" + path_gallery)  # to preview on form
         hashMap.put("gallery", None)
         hashMap.put("camera", None)
+
     # case camera, same as above
     elif hashMap.containsKey("camera") and hashMap.get("camera") != None:
         path_camera = next(
@@ -250,31 +260,14 @@ def birds_add_on_start(hashMap, _files=None, _data=None):
         hashMap.put("new_image", "~" + path_camera)
         hashMap.put("camera", None)
         hashMap.put("gallery", None)
+
     return hashMap
-
-
-# def init_bd_on_start(hashMap, _files=None, _data=None):
-#     hashMap.put("SQLConnectDatabase", "")
-#     hashMap.put(
-#         "SQLExec",
-#         json.dumps(
-#             {
-#                 "query": "create table IF NOT EXISTS Birds(id integer primary key autoincrement, name text, color text, image text)",
-#                 "params": "",
-#             }
-#         ),
-#     )
-#     return hashMap
 
 
 def camera_on_start(hashMap, _files=None, _data=None):
     hashMap.put("mm_local", "")
-    hashMap.put("mm_size", "30")
-    hashMap.put("mm_compression", "30")
-    return hashMap
-
-
-def camera_on_input(hashMap, _files=None, _data=None):
+    # hashMap.put("mm_size", "30") # works only for gallery
+    # hashMap.put("mm_compression", "30") # works only for gallery
     return hashMap
 
 
@@ -316,8 +309,6 @@ def read_seen_birds():
 
 
 def seen_birds_on_input(hashMap, _files=None, _data=None):
-    if hashMap.get("listener") == "check":
-        hashMap.put("toast", hashMap.get("_seen_bird_id"))
     if hashMap.get("listener") == "write_seen_bird_btn":
         write_seen_birds(hashMap.get("_seen_bird_id"))
         hashMap.put("_seen_bird_id", None)
